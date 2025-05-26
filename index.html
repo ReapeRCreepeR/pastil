@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pastil Ordering System</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:600,400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"><!-- Added Pacifico font for .food-title -->
+
+    <style>
+        body {
+            background: #000000;
+            font-family: 'Montserrat', sans-serif;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            padding: 32px 32px 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .header-logo-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            gap: 18px;
+        }
+        .logo-circle {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2196f3;
+            background: #e3f2fd;
+            box-shadow: 0 2px 8px #b3d6fd44;
+            margin-right: 0;
+        }
+        h1.food-title {
+            font-family: ;
+            font-size: 3.0em;
+            color: #2196f3;
+            text-shadow: 2px 2px 8px #e3f2fd, 0 4px 10px #1565c0;
+            letter-spacing: 0.07em;
+            background: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 10px 30px 10px 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(33, 150, 243, 0.15);
+            display: inline-block;
+            margin: 0;
+        }
+        .name-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .name-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+        }
+        .name-input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1.08em;
+            margin-bottom: 0;
+            box-sizing: border-box;
+        }
+        .menu-group {
+            margin-bottom: 24px;
+        }
+        .menu-title {
+            font-size: 1.09em;
+            margin-bottom: 8px;
+            color: #444;
+            font-weight: 600;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 1.04em;
+        }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-img-text {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            flex: 2;
+        }
+        .item-pic {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            background: #eaeaea;
+            border: 2px solid #e2e6f2;
+        }
+        .item-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .menu-controls-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .menu-controls {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid #b1cdf2;
+            border-radius: 999px;
+            overflow: hidden;
+            background: #f7fafc;
+            margin-right: 7px;
+        }
+        .qty {
+            min-width: 28px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.07em;
+            background: none;
+            border: none;
+            padding: 0 5px;
+        }
+        .btn {
+            border: none;
+            background: #3366cc;
+            color: #fff;
+            font-size: 1.15em;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: background 0.16s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .btn:active { background: #254a8a; }
+        .item-price {
+            min-width: 42px;
+            text-align: right;
+            color: #555;
+            font-weight: 600;
+        }
+        .order-summary {
+            margin: 24px 0;
+            padding: 18px;
+            background: #f2f6fb;
+            border-radius: 12px;
+        }
+        .order-summary ul {
+            list-style: none;
+            margin: 0 0 8px 0;
+            padding: 0;
+        }
+        .order-summary li {
+            margin-bottom: 4px;
+        }
+        .order-total {
+            font-weight: 700;
+            font-size: 1.1em;
+            text-align: right;
+            color: #3366cc;
+        }
+        .confirm-btn {
+            background: #41bd6d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.13em;
+            padding: 11px 0;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(65,189,109,0.09);
+            transition: background 0.18s;
+        }
+        .confirm-btn:active { background: #27994f; }
+        /* Modal */
+        .modal-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(44,54,78,0.18);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px 32px 18px;
+            max-width: 350px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+            text-align: center;
+        }
+        .modal h2 { color: #3366cc; margin-bottom: 12px; }
+        .modal ul {
+            text-align: left;
+            margin: 0 0 10px 0;
+            padding: 0 0 0 16px;
+        }
+        .modal-total {
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .modal-actions button {
+            flex: 1 1 0;
+            padding: 8px 0;
+            font-size: 1.04em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .yes-btn { background: #41bd6d; color: #fff; }
+        .yes-btn:active { background: #27994f; }
+        .no-btn { background: #eee; color: #3366cc; }
+        .no-btn:active { background: #ccc; }
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+            .modal { max-width: 95vw; padding: 20px 6vw 12px; }
+            .menu-item { flex-direction: column; align-items: stretch; }
+            .menu-img-text { margin-bottom: 8px; }
+            .menu-controls-price { flex-direction: row; justify-content: flex-end; }
+            .header-logo-title { flex-direction: column; gap: 9px; }
+        }
+        .history-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            text-decoration: none;
+            color: #3366cc;
+            font-size: 1em;
+            transition: color 0.13s;
+        }
+        .history-link:hover { color: #41bd6d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-logo-title">
+            <img src="image/logo.png" alt="Logo" class="logo-circle">
+            <h1 class="food-title">PASTILICIOUS</h1>
+        </div>
+        <div class="name-section">
+            <label for="customer-name" class="name-label">Your Name:</label>
+            <input type="text" id="customer-name" class="name-input" placeholder="Enter your name">
+        </div>
+        <div class="menu-group">
+            <div class="menu-title">Pastil</div>
+            <div class="menu-item" data-name="Pastil Plain" data-price="30">
+                <div class="menu-img-text">
+                    <img src="image/plain.jpg" alt="Pastil Plain" class="item-pic">
+                    <span class="item-name">Pastil Plain</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱30</span>
+                </div>
+            </div>
+            <div class="menu-item" data-name="Pastil with Egg" data-price="45">
+                <div class="menu-img-text">
+                    <img src="image/egg.jpg" alt="Pastil with Egg" class="item-pic">
+                    <span class="item-name">Pastil with Egg</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱45</span>
+                </div>
+            </div>
+        </div>
+        <div class="menu-group">
+            <div class="menu-title">Rice</div>
+            <div class="menu-item" data-name="Rice" data-price="15">
+                <div class="menu-img-text">
+                    <img src="image/1cup.jpg" alt="Rice" class="item-pic">
+                    <span class="item-name">Rice</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱15</span>
+                </div>
+            </div>
+            <div class="menu-item" data-name="Half Rice" data-price="10">
+                <div class="menu-img-text">
+                    <img src="image/half.jpg" alt="Half Rice" class="item-pic">
+                    <span class="item-name">Half Rice</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱10</span>
+                </div>
+            </div>
+        </div>
+        <div class="menu-group">
+            <div class="menu-title">Add-ons (₱5 each)</div>
+            <div class="menu-item" data-name="Mayonnaise" data-price="5">
+                <div class="menu-img-text">
+                    <img src="image/mayo.jpg" alt="Mayonnaise" class="item-pic">
+                    <span class="item-name">Mayonnaise</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱5</span>
+                </div>
+            </div>
+            <div class="menu-item" data-name="Cheese Sauce" data-price="5">
+                <div class="menu-img-text">
+                    <img src="image/cheese.jpg" alt="Cheese Sauce" class="item-pic">
+                    <span class="item-name">Cheese Sauce</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱5</span>
+                </div>
+            </div>
+            <div class="menu-item" data-name="Chili Garlic" data-price="5">
+                <div class="menu-img-text">
+                    <img src="image/chili-garlic.jpg" alt="Chili Garlic" class="item-pic">
+                    <span class="item-name">Chili Garlic</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱5</span>
+                </div>
+            </div>
+            <div class="menu-item" data-name="Chili Oil" data-price="5">
+                <div class="menu-img-text">
+                    <img src="image/chili-oil.jpeg" alt="Chili Oil" class="item-pic">
+                    <span class="item-name">Chili Oil</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱5</span>
+                </div>
+            </div>
+            <div class="menu-item" data-name="Toasted Garlic" data-price="5">
+                <div class="menu-img-text">
+                    <img src="image/garlic.jpg" alt="Toasted Garlic" class="item-pic">
+                    <span class="item-name">Toasted Garlic</span>
+                </div>
+                <div class="menu-controls-price">
+                    <div class="menu-controls">
+                        <button class="btn remove">–</button>
+                        <span class="qty">0</span>
+                        <button class="btn add">+</button>
+                    </div>
+                    <span class="item-price">₱5</span>
+                </div>
+            </div>
+        </div>
+        <div class="order-summary">
+            <ul id="order-list"></ul>
+            <div class="order-total">Total: ₱<span id="order-total">0</span></div>
+            <button id="confirm-btn" class="confirm-btn">Confirm Order</button>
+        </div>
+        <a href="orders.html" class="history-link">View Order History</a>
+    </div>
+    <!-- Modal -->
+    <div class="modal-bg" id="modal-bg">
+        <div class="modal">
+            <h2>Confirm Order</h2>
+            <ul id="modal-order-list"></ul>
+            <div class="modal-total">Total: ₱<span id="modal-total">0</span></div>
+            <div class="modal-actions">
+                <button class="yes-btn" id="modal-yes">Yes</button>
+                <button class="no-btn" id="modal-no">No</button>
+            </div>
+        </div>
+    </div>
+    <script>
+    // --- JS for ordering system ---
+    const menuItems = document.querySelectorAll('.menu-item');
+    const orderList = document.getElementById('order-list');
+    const orderTotalEl = document.getElementById('order-total');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const modalBg = document.getElementById('modal-bg');
+    const modalOrderList = document.getElementById('modal-order-list');
+    const modalTotalEl = document.getElementById('modal-total');
+    const modalYes = document.getElementById('modal-yes');
+    const modalNo = document.getElementById('modal-no');
+    const customerNameInput = document.getElementById('customer-name');
+
+    let cart = {};
+
+    menuItems.forEach(item => {
+        const name = item.dataset.name;
+        const price = parseInt(item.dataset.price);
+        const qtyEl = item.querySelector('.qty');
+        cart[name] = { qty: 0, price };
+
+        item.querySelector('.add').addEventListener('click', () => {
+            cart[name].qty++;
+            qtyEl.textContent = cart[name].qty;
+            updateOrderSummary();
+        });
+        item.querySelector('.remove').addEventListener('click', () => {
+            if (cart[name].qty > 0) {
+                cart[name].qty--;
+                qtyEl.textContent = cart[name].qty;
+                updateOrderSummary();
+            }
+        });
+    });
+
+    function updateOrderSummary() {
+        orderList.innerHTML = '';
+        let total = 0;
+        for (let name in cart) {
+            if (cart[name].qty > 0) {
+                const li = document.createElement('li');
+                li.textContent = cart[name].qty + ' x ' + name + ' (₱' + (cart[name].qty * cart[name].price) + ')';
+                orderList.appendChild(li);
+                total += cart[name].qty * cart[name].price;
+            }
+        }
+        orderTotalEl.textContent = total;
+    }
+
+    confirmBtn.addEventListener('click', () => {
+        const chosen = Object.entries(cart).filter(([name, {qty}]) => qty > 0);
+        if (!customerNameInput.value.trim()) {
+            alert('Please enter your name before ordering.');
+            customerNameInput.focus();
+            return;
+        }
+        if (!chosen.length) {
+            alert('Please select at least one item.');
+            return;
+        }
+        // Show modal
+        modalOrderList.innerHTML = '';
+        let modalTotal = 0;
+        chosen.forEach(([name, item]) => {
+            const li = document.createElement('li');
+            li.textContent = item.qty + ' x ' + name + ' (₱' + (item.qty * item.price) + ')';
+            modalOrderList.appendChild(li);
+            modalTotal += item.qty * item.price;
+        });
+        modalTotalEl.textContent = modalTotal;
+        modalBg.style.display = 'flex';
+    });
+
+    modalNo.addEventListener('click', () => {
+        modalBg.style.display = 'none';
+    });
+
+    modalYes.addEventListener('click', () => {
+        if (!customerNameInput.value.trim()) {
+            alert('Please enter your name before submitting.');
+            customerNameInput.focus();
+            return;
+        }
+
+        const orderData = [];
+        for (let name in cart) {
+            const item = cart[name];
+            if (
+                name &&
+                typeof name === 'string' &&
+                item &&
+                typeof item.qty === 'number' &&
+                item.qty > 0 &&
+                typeof item.price === 'number'
+            ) {
+                orderData.push({ name, qty: item.qty, price: item.price });
+            }
+        }
+        if (!orderData.length) {
+            alert('No valid items to order.');
+            return;
+        }
+
+        fetch('order.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                customer_name: customerNameInput.value.trim(),
+                order: orderData
+            })
+        })
+        .then(res => res.json())
+        .then(result => {
+            if (result.status === 'success') {
+                alert('Thank you! Your order has been placed.\n\nThis is your order ID number: ' + (result.order_id || 'N/A'));
+                resetCart();
+                customerNameInput.value = "";
+                modalBg.style.display = 'none';
+            } else {
+                alert('Order failed: ' + (result.message || 'Unknown error'));
+            }
+        })
+        .catch(err => {
+            alert('Order failed: ' + err.message);
+        });
+    });
+
+    function resetCart() {
+        for (let name in cart) cart[name].qty = 0;
+        menuItems.forEach(item => item.querySelector('.qty').textContent = '0');
+        updateOrderSummary();
+    }
+    </script>
+</body>
+</html>
