@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Orders - Pastil</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #000000;
+            color: #222;
+            margin: 0;
+        }
+        .container {
+            max-width: 750px;
+            margin: -12px auto;
+            background: #fff;
+            border-radius: 18px;
+            padding: 32px 32px 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        h1 {
+            text-align: center;
+            color: #3366cc;
+            margin-bottom: 26px;
+        }
+        /* SCROLLABLE ORDERS AREA */
+        .orders-scroll {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        .order-block {
+            background: #f2f6fb;
+            border-radius: 11px;
+            margin-bottom: 21px;
+            padding: 16px 18px;
+        }
+        .order-block:last-child { margin-bottom: 0; }
+        .order-id { font-size: 1em; color: #222; margin-bottom: 4px; }
+        .order-time { color: #888; font-size: 0.99em; margin-bottom: 5px; }
+        .order-customer { color: #3366cc; font-weight: bold; margin-bottom: 6px;}
+        .order-items { margin: 0 0 5px 0; padding: 0 0 0 17px; }
+        .order-total { font-weight: 700; color: #3366cc; }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 17px;
+            color: #3366cc;
+            text-decoration: none;
+        }
+        .back-link:hover { color: #41bd6d; }
+        /* Custom scrollbar styling (optional) */
+        .orders-scroll::-webkit-scrollbar {
+            width: 7px;
+        }
+        .orders-scroll::-webkit-scrollbar-thumb {
+            background: #c8d9f4;
+            border-radius: 5px;
+        }
+        .orders-scroll::-webkit-scrollbar-track {
+            background: #f2f6fb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>All Orders (Admin)</h1>
+        <div id="orders" class="orders-scroll"></div>
+    </div>
+    <script>
+    fetch('order.php')
+    .then(r => r.json())
+    .then(data => {
+        if (data.status !== 'success') {
+            document.getElementById('orders').innerHTML = '<p>Could not load orders.</p>';
+            return;
+        }
+        if (!data.orders.length) {
+            document.getElementById('orders').innerHTML = '<p>No orders yet.</p>';
+            return;
+        }
+        document.getElementById('orders').innerHTML = data.orders.map(order => `
+            <div class="order-block">
+                <div class="order-id"><b>Order ID:</b> #${order.id}</div>
+                <div class="order-customer">${order.customer_name}</div>
+                <div class="order-time">${order.order_time}</div>
+                <ul class="order-items">
+                    ${order.items.map(it => `<li>${it.qty} x ${it.name} (₱${it.qty * it.price})</li>`).join('')}
+                </ul>
+                <div class="order-total">Total: ₱${order.total}</div>
+            </div>
+        `).join('');
+    });
+    </script>
+</body>
+</html>
